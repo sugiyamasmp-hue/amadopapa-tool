@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="amadopapa tools">
+  <title>amadopapa tools</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Kaisei+Decol:wght@700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans JP', 'Hiragino Sans', sans-serif;
+      background: linear-gradient(160deg, #0f172a 0%, #064e3b 100%);
+      min-height: 100vh;
+      color: #fff;
+    }
+    textarea, button { font-family: inherit; }
+    #home { display: block; }
+    #note-tool { display: none; }
+    .home-header { padding: 48px 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .logo-row { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+    .logo-icon {
+      width: 52px; height: 52px; border-radius: 16px;
+      background: linear-gradient(135deg, #059669, #10b981);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px; box-shadow: 0 4px 20px rgba(16,185,129,0.4);
+    }
+    .logo-title { font-family: 'Kaisei Decol', serif; font-size: 22px; color: #fff; font-weight: 700; }
+    .logo-sub { font-size: 12px; color: #6ee7b7; margin-top: 2px; }
+    .countdown {
+      background: rgba(16,185,129,0.1); border-radius: 12px; padding: 12px 16px;
+      border: 1px solid rgba(16,185,129,0.25);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .countdown-label { font-size: 12px; color: #6ee7b7; }
+    .countdown-days { font-size: 22px; font-weight: 700; }
+    .countdown-days span { color: #10b981; }
+    .tools-section { padding: 20px 16px; }
+    .tools-label { font-size: 11px; font-weight: 700; color: #4b5563; letter-spacing: 0.1em; margin-bottom: 14px; }
+    .tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .tool-btn {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 16px; padding: 18px 14px;
+      text-align: left; cursor: pointer; transition: all 0.2s; color: #fff;
+    }
+    .tool-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .tool-icon { font-size: 28px; margin-bottom: 8px; }
+    .tool-name { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .tool-desc { font-size: 11px; color: #9ca3af; line-height: 1.4; }
+    .tool-open { margin-top: 10px; display: inline-block; border-radius: 6px; padding: 2px 8px; font-size: 10px; color: #fff; font-weight: 700; }
+    .home-footer { text-align: center; padding: 16px; font-size: 11px; color: #374151; }
+    .note-header {
+      display: flex; align-items: center; padding: 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      background: rgba(0,0,0,0.3); backdrop-filter: blur(10px);
+      position: sticky; top: 0; z-index: 10;
+    }
+    .back-btn {
+      background: rgba(255,255,255,0.1); border: none; color: #fff;
+      border-radius: 10px; padding: 8px 14px; font-size: 13px;
+      cursor: pointer; margin-right: 12px;
+    }
+    .note-header-title { font-size: 16px; font-weight: 700; }
+    .note-header-sub { font-size: 11px; color: #6ee7b7; margin-top: 2px; }
+    .note-body { padding: 16px; }
+    .input-card {
+      background: rgba(255,255,255,0.07); border-radius: 16px;
+      padding: 16px; margin-bottom: 16px; border: 1px solid rgba(110,231,183,0.2);
+    }
+    .input-label { font-size: 12px; font-weight: 700; color: #6ee7b7; display: block; margin-bottom: 8px; }
+    .input-area {
+      width: 100%; border: 1px solid rgba(110,231,183,0.3);
+      border-radius: 10px; padding: 12px; font-size: 14px;
+      line-height: 1.7; resize: vertical; outline: none;
+      color: #e2e8f0; background: rgba(0,0,0,0.3);
+    }
+    .input-footer { margin-top: 12px; display: flex; justify-content: space-between; align-items: center; }
+    .char-count { font-size: 11px; color: #6b7280; }
+    .gen-btn {
+      padding: 12px 24px; border-radius: 24px; border: none;
+      background: linear-gradient(135deg, #059669, #10b981);
+      color: #fff; font-size: 14px; font-weight: 700; cursor: pointer;
+      box-shadow: 0 4px 20px rgba(16,185,129,0.4); transition: all 0.2s;
+    }
+    .gen-btn:disabled { background: rgba(255,255,255,0.1); color: #6b7280; box-shadow: none; cursor: not-allowed; }
+    .error-box {
+      background: rgba(220,38,38,0.15); border: 1px solid rgba(220,38,38,0.4);
+      border-radius: 12px; padding: 12px; color: #fca5a5;
+      font-size: 13px; margin-bottom: 16px; display: none;
+    }
+    .result-card {
+      background: rgba(255,255,255,0.05); border-radius: 16px;
+      overflow: hidden; border: 1px solid rgba(110,231,183,0.2); display: none;
+    }
+    .tabs { display: flex; border-bottom: 1px solid rgba(110,231,183,0.2); }
+    .tab-btn {
+      flex: 1; padding: 12px 4px; border: none; background: transparent; color: #6b7280;
+      font-size: 11px; cursor: pointer; transition: all 0.15s; border-bottom: 2px solid transparent;
+    }
+    .tab-btn.active { background: rgba(16,185,129,0.2); color: #6ee7b7; font-weight: 700; border-bottom: 2px solid #10b981; }
+    .tab-panel { padding: 16px; display: none; }
+    .tab-panel.active { display: block; }
+    .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .panel-label { font-size: 12px; font-weight: 700; color: #6ee7b7; }
+    .content-box {
+      background: rgba(0,0,0,0.3); border-radius: 10px; padding: 14px;
+      font-size: 13px; line-height: 1.9; color: #e2e8f0; white-space: pre-wrap;
+      border: 1px solid rgba(110,231,183,0.15); max-height: 300px; overflow-y: auto;
+    }
+    .title-list { display: flex; flex-direction: column; gap: 8px; }
+    .title-item {
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(0,0,0,0.3); border: 1px solid rgba(110,231,183,0.15);
+      border-radius: 10px; padding: 10px 12px; gap: 8px;
+    }
+    .title-text { font-size: 13px; color: #e2e8f0; line-height: 1.5; flex: 1; }
+    .title-num { color: #10b981; font-weight: 700; margin-right: 6px; }
+    .img-section { margin-bottom: 14px; }
+    .img-content {
+      background: rgba(0,0,0,0.3); border-radius: 10px; padding: 12px;
+      font-size: 13px; line-height: 1.8; color: #e2e8f0;
+      border: 1px solid rgba(110,231,183,0.15);
+    }
+    .img-content.en { color: #cbd5e1; font-style: italic; }
+    .copy-btn {
+      padding: 6px 14px; border-radius: 20px; border: none;
+      background: #f0fdf4; color: #16a34a;
+      font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s; white-space: nowrap;
+    }
+    .copy-btn.done { background: #4ade80; color: #fff; }
+  </style>
+</head>
+<body>
+
+<div id="home">
+  <div class="home-header">
+    <div class="logo-row">
+      <div class="logo-icon">Ô˝xéº</div>
+      <div>
+        <div class="logo-title">amadopapa tools</div>
+        <div class="logo-sub">Developed by amadopapa</div>
+      </div>
+    </div>
+    <div class="countdown">
+      <div class="countdown-label">Ô˝z9 FP2Á¥}ÎÂEÈ®z•“]„Åßº/div>
+      <div class="countdown-days">„Åq·“G <span id="days-left">--</span> Âı•º/div>
+    </div>
+  </div>
+  <div class="tools-section">
+    <div class="tools-label">TOOLS</div>
+    <div class="tools-grid">
+      <button class="tool-btn" style="--bg:rgba(16,185,129,0.15);--border:rgba(16,185,129,0.3)" onclick="showTool('note')">
+        <div class="tool-icon">·˙wΩÏπù/div>
+        <div class="tool-name">noteË®|„Ì±ù/div>
+        <div class="tool-desc">„É™„rH„Ç§„r'„Éª„qéΩ„Ç§„r'„É´„rZ„Ç∏„qé•„Ç§„r>„ÉºÊv™ÊC∫º/div>
+        <div class="tool-open" style="background:#10b981">OPEN</div>
+      </button>
+      <button class="tool-btn" style="--bg:rgba(96,165,250,0.15);--border:rgba(96,165,250,0.3)" disabled>
+        <div class="tool-icon">Ô˝z9</div>
+        <div class="tool-name">FP2Á¥}·“é≠„Ç§„qé∏</div>
+        <div class="tool-desc">6ÂàsÌ’-„Éu•”I„É´ÔªÊÊ∫{Â“Œ‰é∂≠ÔªÁ</div>
+      </button>
+      <button class="tool-btn" style="--bg:rgba(245,158,11,0.15);--border:rgba(245,158,11,0.3)" disabled>
+        <div class="tool-icon">Ô˝é£</div>
+        <div class="tool-name">KMC‰º}Â€@ÁÆ°Áxßù/div>
+        <div class="tool-desc">Èáy´È?´Ê}N„É·”I„É≥„qé≠„É©„r5ÔºtÁÌ»Â!}ßÏé´Ôºu[/div>
+      </button>
+      <button class="tool-btn" style="--bg:rgba(248,113,113,0.15);--border:rgba(248,113,113,0.3)" disabled>
+        <div class="tool-icon">Ô˝©∫</div>
+        <div class="tool-name">Ë°pÂﬂé•ÁÆ°Áxßù/div>
+        <div class="tool-desc">Ë®|Ì◊é∞„Éª„qéÆ„É©„r4ÔºtÁÌ»Â!}ßÏé´Ôºu[/div>
+      </button>
+    </div>
+  </div>
+  <div class="home-footer">Ô˝xéº Amado ver. 1.0</div>
+</div>
+
+<div id="note-tool">
+  <div class="note-header">
+    <button class="back-btn" onclick="showHome()">·‰x‹‰"~•”[„É?button>
+    <div>
+      <div class="note-header-title">·˙wΩÏπÅnoteË®|„Ì≤‰!¢„qéµ„Çπ„qéΩ„É≥„r'</div>
+      <div class="note-header-sub">„É™„rH„Ç§„r'„Éª„qéΩ„Ç§„r'„É´„rZ„Ç∏„qé•„Ç§„r>„ÉºÊv™ÊC∫º/div>
+    </div>
+  </div>
+  <div class="note-body">
+    <div class="input-card">
+      <label class="input-label">Ô˝z# ÂÖrØ‰Ã‰é∏v•“¿Êé∞º„q∞‰éπ|·“0„Çv[/label>
+      <textarea id="article-input" class="input-area" rows="7" placeholder="„Åz•“2„Å´Ëßˆ‰∫v•“¿Êé∞º„q∞‰éπ|·“0„Å¶„q.„Å?4„Åré¨.." oninput="updateCount()"></textarea>
+      <div class="input-footer">
+        <span class="char-count"><span id="char-count">0</span>ÂÙt©Á6</span>
+        <button class="gen-btn" id="gen-btn" onclick="generate()" disabled>·˙ß˛‰∏pÈﬁYÁî?ºÍ[q[/button>
+      </div>
+    </div>
+    <div class="error-box" id="error-box"></div>
+    <div class="result-card" id="result-card">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('rewrite')">Ô˝z< „É™„rH„Ç§„r'</button>
+        <button class="tab-btn" onclick="switchTab('titles')">Ô˝xVÔ∏x?„Çø„qé¢„Ét·”J</button>
+        <button class="tab-btn" onclick="switchTab('image')">Ô˝é® „Ç∏„qé•„Ç§„r>„Éºº/button>
+      </div>
+      <div class="tab-panel active" id="panel-rewrite">
+        <div class="panel-header">
+          <span class="panel-label">„É™„rH„Ç§„r'Ê∏t·“^Ë®|„Ì±ù/span>
+          <button class="copy-btn" onclick="copyText('rewrite-content', this)">Ô˝z* „Ç≥„r3„Éºº/button>
+        </div>
+        <div class="content-box" id="rewrite-content"></div>
+      </div>
+      <div class="tab-panel" id="panel-titles">
+        <div class="panel-header">
+          <span class="panel-label" id="titles-label">„Çø„qé¢„Ét·”JÊ°té∫/span>
+        </div>
+        <div class="title-list" id="title-list"></div>
+      </div>
+      <div class="tab-panel" id="panel-image">
+        <div class="img-section">
+          <div class="panel-header">
+            <span class="panel-label">Ô˝tNÔ˝tT Âı•Ê~é™Ë™·”6„É≠„rR„É|•”'</span>
+            <button class="copy-btn" onclick="copyText('img-ja', this)">Ô˝z* „Ç≥„r3„Éºº/button>
+          </div>
+          <div class="img-content" id="img-ja"></div>
+        </div>
+        <div class="img-section">
+          <div class="panel-header">
+            <span class="panel-label">Ô˝tYÔ˝tW English Prompt</span>
+            <button class="copy-btn" onclick="copyText('img-en', this)">Ô˝z* „Ç≥„r3„Éºº/button>
+          </div>
+          <div class="img-content en" id="img-en"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ·ˆs•“2„Åz•“JAPI„Ç≠„r[„ÇyÂ‘D„Çv·“E„Åx•“?„Å{•“#·ˆs)cosk-ant-api03-smnTM=D8MqHH4XlsNGCeU7pyfKEY3zPPd8I6LM5Tr-uXBRvRBRFNXebHGe8imZcgv4JQYy3L2ZJZsNILMFgdy0Q-PCelmQAAnsPI_KEY = "YOUR_API_KEY";
+
+const exam = new Date("2026-10-25");
+const days = Math.ceil((exam - new Date()) / (1000*60*60*24));
+document.getElementById("days-left").textContent = days;
+
+function showTool(id) {
+  document.getElementById("home").style.display = "none";
+  document.getElementById(id + "-tool").style.display = "block";
+}
+function showHome() {
+  document.getElementById("note-tool").style.display = "none";
+  document.getElementById("home").style.display = "block";
+}
+function updateCount() {
+  const val = document.getElementById("article-input").value;
+  document.getElementById("char-count").textContent = val.length;
+  document.getElementById("gen-btn").disabled = val.trim() === "";
+}
+function switchTab(id) {
+  document.querySelectorAll(".tab-btn").forEach((b,i) => {
+    b.classList.toggle("active", ["rewrite","titles","image"][i] === id);
+  });
+  document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+  document.getElementById("panel-" + id).classList.add("active");
+}
+function copyText(elId, btn) {
+  const text = document.getElementById(elId).textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = "·˙z?ÂÆv„Ì®Í[qA; btn.classList.add("done");
+    setTimeout(() => { btn.textContent = "Ô˝z* „Ç≥„r3„Éº¢; btn.classList.remove("done"); }, 2000);
+  });
+}
+
+const SYSTEM_PROMPT = `„Åq·“I„Å?NnoteË®|„Ì≤‰ ÆÁ∑®Èõs·“?∑„qé∑„Çø„rR„Ét·“F„Å}•—?„Äx·”I„É©„qé¢„ÉtÁ‹é∑Èá•—ΩÓ
+- ÂÖr•“MÂÙtßÔ2„Éª„r'„Éº„rR„ÉªÂp≤Â~ß„qN„Å•“M„Åæ„q]ÊÆv•“8
+- Ë™Ì‡®‰!rÁÁé≥ÁÓΩÊßãÂÊx·“¿Â≈ÍÈŸ®‰ |•“EË™≠„q^„Çr·“8„Åx•“8„Çv)- note„Çu•“6„ÅrÁ€é∑Ë°v·”Z„És·”R„É´”⁄‰!yÁ”∫Êé´|·“8„Çv)- ÁÔ|Ø—¶‰ ÆÂp≤Â~ßÔªÊ„É¶„r[„É¢„q?qßÔ2È®zØÊ&„Äq±‹?ø„r-„É™ÔªÁ„ÅØÂu)„Çu•“I„År∞‰xÂ’YÂä~©ÔAÂºx•—Ω´SON„ÅÆ„q^„ÅßËøî„Å|•“E„Åx•“?„Å{•“#:
+{"rewrite":"„É™„rH„Ç§„r'Ê∏t·“^Ë®|„Ì≤Â”ÊÁ‹©É,"titles":["Ê°téØ","Ê°té∞","Ê°té±","Ê°té≤","Ê°té≥"],"imagePrompt":"GeminiÂêy•“0Âı•Ê~é™Ë™·”6„É≠„rR„É|•”'","imagePromptEn":"English prompt for Gemini"}`;
+
+async function generate() {
+  const input = document.getElementById("article-input").value.trim();
+  if (!input) return;
+  const btn = document.getElementById("gen-btn");
+  const errorBox = document.getElementById("error-box");
+  const resultCard = document.getElementById("result-card");
+  btn.disabled = true; btn.textContent = "·Ì≥†Áî?º‰é∂≠Æ..";
+  errorBox.style.display = "none"; resultCard.style.display = "none";
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": API_KEY,
+        "anthropic-version": "2023-06-01",
+        "anthropic-dangerous-direct-browser-access": "true"
+      },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 4000,
+        system: SYSTEM_PROMPT,
+        messages: [{ role: "user", content: "‰ª•‰∑È„ÅÆËßˆ‰∫v•“¿‰"™„rH„Ç§„r'„Å|•“E„Åx•“?„Å{•“#Ôº}é⁄n\n" + input }]
+      })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+    const text = (data.content||[]).map(i=>i.text||"").join("");
+    const clean = text.replace(/```json|```/g,"").trim();
+    const parsed = JSON.parse(clean);
+    document.getElementById("rewrite-content").textContent = parsed.rewrite;
+    document.getElementById("titles-label").textContent = "„Çø„qé¢„Ét·”JÊ°t€É + parsed.titles.length + "‰ª∂¢;
+    const list = document.getElementById("title-list");
+    list.innerHTML = "";
+    parsed.titles.forEach((t,i) => {
+      const div = document.createElement("div");
+      div.className = "title-item";
+      div.innerHTML = `<span class="title-text"><span class="title-num">${i+1}.</span>${t}</span>`;
+      const btn2 = document.createElement("button");
+      btn2.className = "copy-btn";
+      btn2.textContent = "Ô˝z* „Ç≥„r3„Éº¢;
+      btn2.onclick = () => {
+        navigator.clipboard.writeText(t);
+        btn2.textContent = "·˙z?ÂÆv„Ì®Í[qA; btn2.classList.add("done");
+        setTimeout(()=>{ btn2.textContent="Ô˝z* „Ç≥„r3„Éº¢; btn2.classList.remove("done"); },2000);
+      };
+      div.appendChild(btn2);
+      list.appendChild(div);
+    });
+    document.getElementById("img-ja").textContent = parsed.imagePrompt;
+    document.getElementById("img-en").textContent = parsed.imagePromptEn;
+    resultCard.style.display = "block";
+    switchTab("rewrite");
+  } catch(err) {
+    errorBox.textContent = "·¯?πÅ„Ç®„rH„Éº∫ " + err.message;
+    errorBox.style.display = "block";
+  } finally {
+    btn.disabled = false; btn.textContent = "·˙ß˛‰∏pÈﬁYÁî?ºÍ[qA;
+  }
+}
+</script>
+</body>
+</html>
