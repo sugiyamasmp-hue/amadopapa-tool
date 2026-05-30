@@ -3,112 +3,647 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Amadopapatool</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<title>Vault — 重要情報管理</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#f5f5f0;font-family:'Noto Sans JP',sans-serif;color:#1a1a1a;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
-.container{width:100%;max-width:600px}
-.header{text-align:center;margin-bottom:2rem}
-.header h1{font-size:22px;font-weight:500;letter-spacing:0.02em;color:#1a1a1a}
-.header p{font-size:13px;color:#888;margin-top:4px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:1.5rem}
-.card{text-decoration:none;background:white;border:0.5px solid rgba(0,0,0,0.1);border-radius:12px;padding:1.25rem 1rem;display:flex;flex-direction:column;align-items:center;gap:10px;transition:background 0.15s}
-.card:hover{background:#f9f9f7}
-.icon-box{width:44px;height:44px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:22px}
-.icon-box.blue{background:#e6f1fb;color:#185fa5}
-.icon-box.red{background:#fcebeb;color:#a32d2d}
-.icon-box.green{background:#eaf3de;color:#3b6d11}
-.icon-box.amber{background:#faeeda;color:#ba7517}
-.icon-box.gray{background:#f1efe8;color:#5f5e5a}
-.icon-box.gold{background:#faeeda;color:#ba7517}
-.card-title{font-size:14px;font-weight:500;color:#1a1a1a;text-align:center}
-.card-desc{font-size:12px;color:#888;text-align:center;margin-top:2px}
-.dropdown-wrapper{background:#f1efe8;border-radius:12px;border:0.5px solid rgba(0,0,0,0.1);overflow:hidden}
-.dropdown-btn{width:100%;padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;background:transparent;border:none;cursor:pointer}
-.dropdown-btn-left{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:500;color:#1a1a1a}
-.dropdown-content{display:none;border-top:0.5px solid rgba(0,0,0,0.1)}
-.dropdown-item{text-decoration:none;display:flex;align-items:center;gap:12px;padding:0.875rem 1.25rem;border-bottom:0.5px solid rgba(0,0,0,0.07);background:transparent;transition:background 0.15s}
-.dropdown-item:last-child{border-bottom:none}
-.dropdown-item:hover{background:white}
-.icon-box-sm{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.item-title{font-size:14px;font-weight:500;color:#1a1a1a}
-.item-url{font-size:12px;color:#888;margin-top:2px}
-.external{font-size:14px;color:#888;margin-left:auto}
+  :root {
+    --bg: #0f0f0f; --surface: #1a1a1a; --surface2: #222; --border: #2a2a2a;
+    --accent: #c8a96e; --accent2: #e8c98e; --text: #e8e8e8; --text2: #999;
+    --danger: #e05555; --success: #5cb85c;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  /* ── 認証画面 ── */
+  #authScreen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+  .auth-box { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 32px 24px; width: 100%; max-width: 380px; }
+  .auth-logo { text-align: center; margin-bottom: 24px; }
+  .auth-logo-icon { width: 56px; height: 56px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 12px; }
+  .auth-logo h1 { font-family: 'Space Mono', monospace; font-size: 20px; color: var(--accent); letter-spacing: 3px; }
+  .auth-logo p { font-size: 11px; color: var(--text2); margin-top: 4px; }
+  .auth-tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid var(--border); }
+  .auth-tab { flex: 1; padding: 10px; text-align: center; font-size: 13px; color: var(--text2); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; font-family: 'Noto Sans JP', sans-serif; background: none; border-top: none; border-left: none; border-right: none; }
+  .auth-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .form-group { margin-bottom: 14px; }
+  .form-label { font-size: 11px; color: var(--text2); margin-bottom: 5px; display: block; }
+  .form-input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; color: var(--text); font-size: 14px; font-family: 'Noto Sans JP', sans-serif; outline: none; transition: border-color 0.2s; }
+  .form-input:focus { border-color: var(--accent); }
+  .btn-auth { width: 100%; padding: 12px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; border-radius: 8px; color: #1a1a1a; font-weight: 700; font-size: 14px; cursor: pointer; font-family: 'Noto Sans JP', sans-serif; margin-top: 4px; }
+  .auth-divider { display: flex; align-items: center; gap: 10px; margin: 16px 0; }
+  .auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .auth-divider span { font-size: 11px; color: var(--text2); }
+  .btn-google { width: 100%; padding: 11px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 14px; cursor: pointer; font-family: 'Noto Sans JP', sans-serif; display: flex; align-items: center; justify-content: center; gap: 8px; transition: border-color 0.2s; }
+  .btn-google:hover { border-color: var(--accent); }
+  .auth-msg { font-size: 12px; text-align: center; margin-top: 10px; min-height: 18px; }
+
+  /* ── メインアプリ ── */
+  #appScreen { display: none; }
+  header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+  .logo { display: flex; align-items: center; gap: 10px; }
+  .logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .logo-text h1 { font-family: 'Space Mono', monospace; font-size: 16px; color: var(--accent); letter-spacing: 2px; }
+  .logo-text p { font-size: 10px; color: var(--text2); }
+  .header-right { display: flex; align-items: center; gap: 10px; }
+  .item-count { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--accent); background: rgba(200,169,110,0.1); padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(200,169,110,0.2); }
+  .btn-logout { background: none; border: 1px solid var(--border); border-radius: 8px; color: var(--text2); font-size: 11px; padding: 5px 10px; cursor: pointer; font-family: 'Noto Sans JP', sans-serif; }
+  .btn-logout:hover { border-color: var(--danger); color: var(--danger); }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 20px 16px; display: grid; grid-template-columns: 1fr 380px; gap: 20px; }
+  @media (max-width: 768px) { .container { grid-template-columns: 1fr; } .form-panel { display: none; } }
+
+  .search-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .search-bar input { background: none; border: none; outline: none; color: var(--text); font-size: 14px; width: 100%; font-family: 'Noto Sans JP', sans-serif; }
+  .search-bar input::placeholder { color: var(--text2); }
+
+  .cat-tabs { display: flex; gap: 6px; margin-bottom: 16px; overflow-x: auto; padding-bottom: 4px; }
+  .cat-tab { padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); color: var(--text2); font-size: 12px; cursor: pointer; white-space: nowrap; transition: all 0.2s; font-family: 'Noto Sans JP', sans-serif; }
+  .cat-tab.active { border-color: var(--accent); color: var(--accent); background: rgba(200,169,110,0.1); }
+
+  .card-list { display: flex; flex-direction: column; gap: 10px; }
+  .vault-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden; }
+  .vault-card:hover { border-color: var(--accent); }
+  .vault-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--accent); }
+  .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+  .card-title { font-size: 14px; font-weight: 700; color: var(--text); }
+  .card-actions { display: flex; gap: 6px; }
+  .btn-icon { width: 28px; height: 28px; border-radius: 6px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 13px; }
+  .btn-edit { background: rgba(200,169,110,0.1); color: var(--accent); }
+  .btn-del { background: rgba(224,85,85,0.1); color: var(--danger); }
+  .card-cat { font-size: 11px; color: var(--text2); margin-bottom: 4px; }
+  .card-content { font-size: 12px; color: var(--text2); white-space: pre-wrap; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .card-file { margin-top: 8px; font-size: 11px; color: var(--accent); }
+  .card-thumb { margin-top: 8px; width: 60px; height: 60px; object-fit: cover; border-radius: 6px; }
+  .card-link { display: inline-block; margin-top: 8px; font-size: 11px; color: var(--accent); text-decoration: none; padding: 3px 10px; border: 1px solid rgba(200,169,110,0.3); border-radius: 12px; transition: all 0.2s; }
+  .card-link:hover { background: rgba(200,169,110,0.15); }
+
+  .empty-state { text-align: center; padding: 40px 20px; color: var(--text2); }
+  .empty-state .icon { font-size: 40px; margin-bottom: 12px; }
+  .loading { text-align: center; padding: 30px; color: var(--text2); font-size: 13px; }
+
+  .form-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; position: sticky; top: 72px; max-height: calc(100vh - 92px); overflow-y: auto; }
+  .form-title { font-family: 'Space Mono', monospace; font-size: 13px; color: var(--accent); letter-spacing: 1px; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .cat-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-bottom: 14px; }
+  .cat-btn { padding: 8px 2px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface2); color: var(--text2); font-size: 10px; cursor: pointer; text-align: center; transition: all 0.2s; font-family: 'Noto Sans JP', sans-serif; line-height: 1.4; }
+  .cat-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(200,169,110,0.1); }
+  .cat-btn .cat-icon { font-size: 16px; display: block; margin-bottom: 2px; }
+  .form-group { margin-bottom: 12px; }
+  .form-label { font-size: 11px; color: var(--text2); margin-bottom: 5px; display: block; }
+  .form-input2, .form-textarea { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 9px 11px; color: var(--text); font-size: 13px; font-family: 'Noto Sans JP', sans-serif; outline: none; transition: border-color 0.2s; }
+  .form-input2:focus, .form-textarea:focus { border-color: var(--accent); }
+  .form-textarea { resize: vertical; min-height: 90px; }
+  .file-upload { border: 2px dashed var(--border); border-radius: 8px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.2s; position: relative; }
+  .file-upload:hover { border-color: var(--accent); }
+  .file-upload input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+  .file-upload .upload-icon { font-size: 24px; margin-bottom: 6px; }
+  .file-upload p { font-size: 11px; color: var(--text2); }
+  .file-preview { margin-top: 8px; padding: 7px 10px; background: var(--surface2); border-radius: 6px; font-size: 11px; color: var(--accent); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .file-preview button { margin-left: auto; background: none; border: none; color: var(--danger); cursor: pointer; font-size: 14px; }
+  .img-preview { max-width: 100%; border-radius: 6px; margin-top: 8px; display: block; }
+  .btn-submit { width: 100%; padding: 11px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; border-radius: 8px; color: #1a1a1a; font-weight: 700; font-size: 14px; cursor: pointer; font-family: 'Noto Sans JP', sans-serif; transition: all 0.2s; margin-top: 4px; }
+  .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-cancel { width: 100%; padding: 9px; background: none; border: 1px solid var(--border); border-radius: 8px; color: var(--text2); font-size: 12px; cursor: pointer; font-family: 'Noto Sans JP', sans-serif; margin-top: 6px; }
+
+  .fab { display: none; }
+  @media (max-width: 768px) {
+    .fab { display: flex; position: fixed; bottom: 24px; right: 20px; width: 56px; height: 56px; border-radius: 16px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; color: #1a1a1a; font-size: 28px; font-weight: 700; cursor: pointer; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(200,169,110,0.4); z-index: 50; }
+  }
+
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 200; display: none; align-items: flex-end; justify-content: center; }
+  .modal-overlay.show { display: flex; }
+  .modal { background: var(--surface); border-radius: 20px 20px 0 0; padding: 20px 16px 32px; width: 100%; max-height: 92vh; overflow-y: auto; }
+  .modal-handle { width: 40px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 16px; }
+  .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .modal-title-text { font-size: 16px; font-weight: 700; color: var(--accent); font-family: 'Space Mono', monospace; }
+  .modal-close { width: 30px; height: 30px; border-radius: 6px; border: 1px solid var(--border); background: none; color: var(--text2); cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; }
+
+  .detail-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 300; display: none; align-items: center; justify-content: center; padding: 20px; }
+  .detail-overlay.show { display: flex; }
+  .detail-modal { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 24px; max-width: 520px; width: 100%; max-height: 80vh; overflow-y: auto; }
+  .detail-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+  .detail-title { font-size: 18px; font-weight: 700; }
+  .detail-cat { font-size: 12px; color: var(--text2); margin-bottom: 14px; }
+  .detail-content { font-size: 14px; color: var(--text); white-space: pre-wrap; line-height: 1.8; background: var(--surface2); padding: 12px; border-radius: 8px; margin-bottom: 10px; }
+  .detail-remarks { font-size: 13px; color: var(--text2); background: var(--surface2); padding: 10px; border-radius: 8px; margin-bottom: 10px; line-height: 1.8; white-space: pre-wrap; word-break: break-all; }
+  .detail-remarks a { color: var(--accent); text-decoration: none; }
+  .detail-remarks a:hover { text-decoration: underline; }
+  .detail-file img { max-width: 100%; border-radius: 8px; margin-top: 8px; }
+  .detail-file a { color: var(--accent); font-size: 13px; text-decoration: none; }
+
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px 18px; font-size: 13px; z-index: 1000; opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap; }
+  .toast.show { opacity: 1; }
+  .toast.success { border-color: var(--success); color: var(--success); }
+  .toast.error { border-color: var(--danger); color: var(--danger); }
+
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 </style>
 </head>
 <body>
-<div class="container">
-  <div class="header">
-    <h1>Amadopapatool</h1>
-    <p>amadopapa のツール集</p>
-  </div>
 
-  <div class="grid">
-    <a href="https://amadopapa-tool.vercel.app" target="_blank" class="card">
-      <div class="icon-box blue"><i class="ti ti-pencil"></i></div>
-      <div><div class="card-title">note リライト</div><div class="card-desc">文章をAIで改善</div></div>
-    </a>
-    <a href="https://ketuatu-git-main-sugiyamasmp-hues-projects.vercel.app" target="_blank" class="card">
-      <div class="icon-box red"><i class="ti ti-heart-rate-monitor"></i></div>
-      <div><div class="card-title">血圧管理</div><div class="card-desc">記録・グラフ表示</div></div>
-    </a>
-    <a href="https://kaimono-memo1.vercel.app" target="_blank" class="card">
-      <div class="icon-box green"><i class="ti ti-shopping-cart"></i></div>
-      <div><div class="card-title">買い物メモ</div><div class="card-desc">リスト作成・共有</div></div>
-    </a>
-    <a href="https://fp-pink-rho.vercel.app" target="_blank" class="card">
-      <div class="icon-box amber"><i class="ti ti-calculator"></i></div>
-      <div><div class="card-title">FP ツール</div><div class="card-desc">ファイナンス計算</div></div>
-    </a>
-    <a href="https://vault-chi-brown.vercel.app" target="_blank" class="card">
-      <div class="icon-box gray"><i class="ti ti-database"></i></div>
-      <div><div class="card-title">情報管理</div><div class="card-desc">データ保管・整理</div></div>
-    </a>
-    <a href="https://gold-tracker-two-beryl.vercel.app" target="_blank" class="card">
-      <div class="icon-box gold"><i class="ti ti-coin"></i></div>
-      <div><div class="card-title">ゴールド</div><div class="card-desc">金価格トラッカー</div></div>
-    </a>
-  </div>
-
-  <div class="dropdown-wrapper">
-    <button class="dropdown-btn" onclick="const d=this.nextElementSibling;const open=d.style.display==='block';d.style.display=open?'none':'block';this.querySelector('i').className='ti '+(open?'ti-chevron-down':'ti-chevron-up');">
-      <div class="dropdown-btn-left"><i class="ti ti-apps" style="font-size:18px;color:#888"></i>その他のツール</div>
-      <i class="ti ti-chevron-down" style="font-size:16px;color:#888"></i>
-    </button>
-    <div class="dropdown-content">
-      <a href="https://kmc-theta.vercel.app" target="_blank" class="dropdown-item">
-        <div class="icon-box-sm blue"><i class="ti ti-users"></i></div>
-        <div><div class="item-title">KMC 会員</div><div class="item-url">kmc-theta.vercel.app</div></div>
-        <i class="ti ti-external-link external"></i>
-      </a>
-      <a href="https://wagaya-recipe.vercel.app" target="_blank" class="dropdown-item">
-        <div class="icon-box-sm amber"><i class="ti ti-soup"></i></div>
-        <div><div class="item-title">我が家のレシピ</div><div class="item-url">wagaya-recipe.vercel.app</div></div>
-        <i class="ti ti-external-link external"></i>
-      </a>
-      <a href="https://amadogyoza.vercel.app" target="_blank" class="dropdown-item">
-        <div class="icon-box-sm green"><i class="ti ti-tools-kitchen-2"></i></div>
-        <div><div class="item-title">餃子ログ</div><div class="item-url">amadogyoza.vercel.app</div></div>
-        <i class="ti ti-external-link external"></i>
-        
-      </a>
+<!-- 認証画面 -->
+<div id="authScreen">
+  <div class="auth-box">
+    <div class="auth-logo">
+      <div class="auth-logo-icon">🔐</div>
+      <h1>VAULT</h1>
+      <p>重要情報マネージャー</p>
     </div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchAuthTab('login')">ログイン</button>
+      <button class="auth-tab" onclick="switchAuthTab('signup')">新規登録</button>
+    </div>
+    <div id="emailForm">
+      <div class="form-group"><label class="form-label">メールアドレス</label><input type="email" class="form-input" id="authEmail" placeholder="example@mail.com"></div>
+      <div class="form-group"><label class="form-label">パスワード</label><input type="password" class="form-input" id="authPassword" placeholder="6文字以上"></div>
+      <button class="btn-auth" id="authSubmitBtn" onclick="handleEmailAuth()">ログイン</button>
+    </div>
+    <div class="auth-divider"><span>または</span></div>
+    <button class="btn-google" onclick="handleGoogleAuth()">
+      <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 0 0 2.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#34A353" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 0 1-7.18-2.54H1.83v2.07A8 8 0 0 0 8.98 17z"/><path fill="#FBBC05" d="M4.5 10.52a4.8 4.8 0 0 1 0-3.04V5.41H1.83a8 8 0 0 0 0 7.18l2.67-2.07z"/><path fill="#EA4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 0 0 1.83 5.4L4.5 7.49a4.77 4.77 0 0 1 4.48-3.3z"/></svg>
+      Googleでログイン
+    </button>
+    <div class="auth-msg" id="authMsg"></div>
   </div>
 </div>
+
+<!-- メインアプリ -->
+<div id="appScreen">
+  <header>
+    <div class="logo">
+      <div class="logo-icon">🔐</div>
+      <div class="logo-text"><h1>VAULT</h1><p>重要情報マネージャー</p></div>
+    </div>
+    <div class="header-right">
+      <span class="item-count" id="itemCount">0 件</span>
+      <button class="btn-logout" onclick="handleLogout()">ログアウト</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <div>
+      <div class="search-bar"><span>🔍</span><input type="text" id="searchInput" placeholder="名称・内容を検索..."></div>
+      <div class="cat-tabs">
+        <button class="cat-tab active" data-cat="all">すべて</button>
+        <button class="cat-tab" data-cat="銀行口座">🏦 銀行</button>
+        <button class="cat-tab" data-cat="パスワード">🔑 パスワード</button>
+        <button class="cat-tab" data-cat="書類">📄 書類</button>
+        <button class="cat-tab" data-cat="カード">💳 カード</button>
+        <button class="cat-tab" data-cat="その他">📁 その他</button>
+      </div>
+      <div class="card-list" id="cardList"><div class="loading">読み込み中...</div></div>
+    </div>
+
+    <div class="form-panel">
+      <div class="form-title" id="pcFormTitle">＋ 新規登録</div>
+      <div class="cat-grid" id="pcCatGrid">
+        <button class="cat-btn active" data-cat="銀行口座"><span class="cat-icon">🏦</span>銀行口座</button>
+        <button class="cat-btn" data-cat="パスワード"><span class="cat-icon">🔑</span>パスワード</button>
+        <button class="cat-btn" data-cat="書類"><span class="cat-icon">📄</span>書類</button>
+        <button class="cat-btn" data-cat="カード"><span class="cat-icon">💳</span>カード</button>
+        <button class="cat-btn" data-cat="その他"><span class="cat-icon">📁</span>その他</button>
+      </div>
+      <div class="form-group"><label class="form-label">名称 *</label><input type="text" class="form-input2" id="pcTitle" placeholder="例：PayPay銀行"></div>
+      <div class="form-group"><label class="form-label">内容 *</label><textarea class="form-textarea" id="pcContent" placeholder="口座番号、パスワードなど"></textarea></div>
+      <div class="form-group"><label class="form-label">備考</label><textarea class="form-textarea" id="pcRemarks" style="min-height:60px" placeholder="メモや補足情報、URLを入れると自動でリンクになります"></textarea></div>
+      <div class="form-group">
+        <label class="form-label">ファイル添付（画像・PDF）</label>
+        <div class="file-upload" id="pcDropZone">
+          <input type="file" id="pcFile" accept="image/*,.pdf">
+          <div class="upload-icon">📎</div>
+          <p>クリックしてファイルを選択</p>
+          <p style="font-size:10px;margin-top:3px;color:var(--text2)">画像・PDF対応（10MB以下）</p>
+        </div>
+        <div class="file-preview" id="pcFilePreview" style="display:none">
+          <span id="pcFileName"></span>
+          <button onclick="clearFile('pc')">✕</button>
+        </div>
+        <img id="pcImgPreview" class="img-preview" style="display:none">
+      </div>
+      <button class="btn-submit" id="pcSubmit" onclick="handleSubmit('pc')">登録する</button>
+      <button class="btn-cancel" id="pcCancel" style="display:none" onclick="resetForm()">キャンセル</button>
+    </div>
+  </div>
+
+  <button class="fab" onclick="openMobileForm()">＋</button>
+</div>
+
+<!-- モバイルフォームモーダル -->
+<div class="modal-overlay" id="mobileFormOverlay">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-title-text" id="mobileFormTitle">＋ 新規登録</div>
+      <button class="modal-close" onclick="closeMobileFormDirect()">✕</button>
+    </div>
+    <div class="cat-grid" id="mobileCatGrid">
+      <button class="cat-btn active" data-cat="銀行口座"><span class="cat-icon">🏦</span>銀行口座</button>
+      <button class="cat-btn" data-cat="パスワード"><span class="cat-icon">🔑</span>パスワード</button>
+      <button class="cat-btn" data-cat="書類"><span class="cat-icon">📄</span>書類</button>
+      <button class="cat-btn" data-cat="カード"><span class="cat-icon">💳</span>カード</button>
+      <button class="cat-btn" data-cat="その他"><span class="cat-icon">📁</span>その他</button>
+    </div>
+    <div class="form-group"><label class="form-label">名称 *</label><input type="text" class="form-input2" id="mobileTitle" placeholder="例：PayPay銀行"></div>
+    <div class="form-group"><label class="form-label">内容 *</label><textarea class="form-textarea" id="mobileContent" placeholder="口座番号、パスワードなど"></textarea></div>
+    <div class="form-group"><label class="form-label">備考</label><textarea class="form-textarea" id="mobileRemarks" style="min-height:60px" placeholder="メモや補足情報、URLを入れると自動でリンクになります"></textarea></div>
+    <div class="form-group">
+      <label class="form-label">ファイル添付（画像・PDF）</label>
+      <div class="file-upload">
+        <input type="file" id="mobileFile" accept="image/*,.pdf">
+        <div class="upload-icon">📎</div>
+        <p>タップしてファイルを選択</p>
+        <p style="font-size:10px;margin-top:3px;color:var(--text2)">画像・PDF対応（10MB以下）</p>
+      </div>
+      <div class="file-preview" id="mobileFilePreview" style="display:none">
+        <span id="mobileFileName"></span>
+        <button onclick="clearFile('mobile')">✕</button>
+      </div>
+      <img id="mobileImgPreview" class="img-preview" style="display:none">
+    </div>
+    <button class="btn-submit" id="mobileSubmit" onclick="handleSubmit('mobile')">登録する</button>
+    <button class="btn-cancel" id="mobileCancel" style="display:none" onclick="resetForm()">キャンセル</button>
+  </div>
+</div>
+
+<!-- 詳細モーダル -->
+<div class="detail-overlay" id="detailOverlay" onclick="closeDetail(event)">
+  <div class="detail-modal">
+    <div class="detail-header">
+      <div class="detail-title" id="detailTitle"></div>
+      <button class="modal-close" onclick="closeDetailDirect()">✕</button>
+    </div>
+    <div class="detail-cat" id="detailCat"></div>
+    <div class="detail-content" id="detailContent"></div>
+    <div class="detail-remarks" id="detailRemarks" style="display:none"></div>
+    <div class="detail-file" id="detailFile"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, orderBy, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBplaq4hCnjbSm6erkJFSJDRkxC2r8ESGU",
+  authDomain: "vault-app-3bdf8.firebaseapp.com",
+  projectId: "vault-app-3bdf8",
+  storageBucket: "vault-app-3bdf8.firebasestorage.app",
+  messagingSenderId: "382817010411",
+  appId: "1:382817010411:web:c61a250791b1d6e1a2f4ae"
+};
+
+const CLOUDINARY_CLOUD = "dyawr0npq";
+const CLOUDINARY_UPLOAD_PRESET = "vault_unsigned";
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+const googleProvider = new GoogleAuthProvider();
+
+let items = [];
+let currentUser = null;
+let selectedCat = { pc: '銀行口座', mobile: '銀行口座' };
+let filterCat = 'all';
+let searchQ = '';
+let editId = null;
+let selectedFile = { pc: null, mobile: null };
+let authMode = 'login';
+
+function normCat(c) { return c === 'クレジットカード' ? 'カード' : c; }
+
+function extractUrl(text) {
+  if (!text) return null;
+  const m = text.match(/https?:\/\/[^\s]+/);
+  return m ? m[0] : null;
+}
+
+function linkify(text) {
+  return esc(text).replace(
+    /https?:\/\/[^\s]+/g,
+    url => `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`
+  );
+}
+
+// ── 認証 ──
+window.switchAuthTab = (mode) => {
+  authMode = mode;
+  document.querySelectorAll('.auth-tab').forEach((t, i) => t.classList.toggle('active', (mode === 'login' && i === 0) || (mode === 'signup' && i === 1)));
+  document.getElementById('authSubmitBtn').textContent = mode === 'login' ? 'ログイン' : '新規登録';
+  document.getElementById('authMsg').textContent = '';
+};
+
+window.handleEmailAuth = async () => {
+  const email = document.getElementById('authEmail').value.trim();
+  const password = document.getElementById('authPassword').value;
+  const msg = document.getElementById('authMsg');
+  if (!email || !password) { msg.style.color = 'var(--danger)'; msg.textContent = 'メールとパスワードを入力してください'; return; }
+  try {
+    if (authMode === 'login') {
+      await signInWithEmailAndPassword(auth, email, password);
+    } else {
+      await createUserWithEmailAndPassword(auth, email, password);
+    }
+  } catch(e) {
+    msg.style.color = 'var(--danger)';
+    msg.textContent = e.code === 'auth/wrong-password' ? 'パスワードが違います' :
+                      e.code === 'auth/user-not-found' ? 'ユーザーが見つかりません' :
+                      e.code === 'auth/email-already-in-use' ? 'このメールは既に登録済みです' :
+                      e.code === 'auth/weak-password' ? 'パスワードは6文字以上にしてください' : 'エラーが発生しました';
+  }
+};
+
+window.handleGoogleAuth = async () => {
+  try {
+    await signInWithPopup(auth, googleProvider);
+  } catch(e) {
+    const msg = document.getElementById('authMsg');
+    msg.style.color = 'var(--danger)';
+    msg.textContent = 'Googleログインに失敗しました';
+  }
+};
+
+window.handleLogout = async () => {
+  await signOut(auth);
+};
+
+onAuthStateChanged(auth, user => {
+  currentUser = user;
+  if (user) {
+    document.getElementById('authScreen').style.display = 'none';
+    document.getElementById('appScreen').style.display = 'block';
+    loadItems();
+  } else {
+    document.getElementById('authScreen').style.display = 'flex';
+    document.getElementById('appScreen').style.display = 'none';
+    items = [];
+  }
+});
+
+// ── データ ──
+async function uploadToCloudinary(file) {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+  const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/auto/upload`, { method: 'POST', body: formData });
+  if (!res.ok) throw new Error('Cloudinaryアップロード失敗');
+  const data = await res.json();
+  return { url: data.secure_url, isImage: data.resource_type === 'image' };
+}
+
+['pc', 'mobile'].forEach(prefix => {
+  document.getElementById(prefix + 'CatGrid').querySelectorAll('.cat-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.getElementById(prefix + 'CatGrid').querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedCat[prefix] = btn.dataset.cat;
+    });
+  });
+});
+
+document.querySelectorAll('.cat-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    filterCat = tab.dataset.cat;
+    renderList();
+  });
+});
+
+document.getElementById('searchInput').addEventListener('input', e => { searchQ = e.target.value.toLowerCase(); renderList(); });
+
+['pc', 'mobile'].forEach(prefix => {
+  const input = document.getElementById(prefix + 'File');
+  input.addEventListener('click', e => e.stopPropagation());
+  input.addEventListener('change', e => {
+    e.stopPropagation();
+    const file = e.target.files[0];
+    if (!file) return;
+    selectedFile[prefix] = file;
+    document.getElementById(prefix + 'FileName').textContent = file.name;
+    document.getElementById(prefix + 'FilePreview').style.display = 'flex';
+    if (file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = ev => {
+        const img = document.getElementById(prefix + 'ImgPreview');
+        img.src = ev.target.result;
+        img.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+});
+
+window.clearFile = (prefix) => {
+  selectedFile[prefix] = null;
+  document.getElementById(prefix + 'File').value = '';
+  document.getElementById(prefix + 'FilePreview').style.display = 'none';
+  document.getElementById(prefix + 'ImgPreview').style.display = 'none';
+  document.getElementById(prefix + 'ImgPreview').src = '';
+};
+
+async function loadItems() {
+  if (!currentUser) return;
+  try {
+    const q = query(collection(db, 'vaultItems'), where('user_id', '==', currentUser.uid), orderBy('createdAt', 'desc'));
+    const snap = await getDocs(q);
+    items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderList();
+    updateCount();
+  } catch(e) {
+    showToast('データ取得エラー: ' + e.message, 'error');
+    document.getElementById('cardList').innerHTML = '<div class="empty-state"><div class="icon">⚠️</div><p>データを取得できませんでした</p></div>';
+  }
+}
+
+function renderList() {
+  const list = document.getElementById('cardList');
+  const filtered = items.filter(item => {
+    const cat = normCat(item.category);
+    const matchCat = filterCat === 'all' || cat === filterCat;
+    const matchSearch = !searchQ || item.title?.toLowerCase().includes(searchQ) || item.content?.toLowerCase().includes(searchQ);
+    return matchCat && matchSearch;
+  });
+
+  if (filtered.length === 0) {
+    list.innerHTML = '<div class="empty-state"><div class="icon">🔐</div><p>まだ登録がありません</p></div>';
+    return;
+  }
+
+  list.innerHTML = filtered.map(item => {
+    const url = extractUrl(item.remarks);
+    return `
+      <div class="vault-card" onclick="showDetail('${item.id}')">
+        <div class="card-header">
+          <div class="card-title">${esc(item.title)}</div>
+          <div class="card-actions" onclick="event.stopPropagation()">
+            <button class="btn-icon btn-edit" onclick="startEdit('${item.id}')">✏️</button>
+            <button class="btn-icon btn-del" onclick="deleteItem('${item.id}')">🗑️</button>
+          </div>
+        </div>
+        <div class="card-cat">${esc(normCat(item.category))}</div>
+        <div class="card-content">${esc(item.content)}</div>
+        ${item.isImage && item.fileUrl ? `<img class="card-thumb" src="${item.fileUrl}" alt="${esc(item.fileName)}">` : ''}
+        ${item.fileName && !item.isImage ? `<div class="card-file">📎 ${esc(item.fileName)}</div>` : ''}
+        ${url ? `<a class="card-link" href="${url}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">🔗 リンクを開く</a>` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+function updateCount() { document.getElementById('itemCount').textContent = items.length + ' 件'; }
+
+window.handleSubmit = async (prefix) => {
+  const title = document.getElementById(prefix + 'Title').value.trim();
+  const content = document.getElementById(prefix + 'Content').value.trim();
+  const remarks = document.getElementById(prefix + 'Remarks').value.trim();
+  const cat = selectedCat[prefix];
+  const file = selectedFile[prefix];
+
+  if (!title) { showToast('名称を入力してください', 'error'); return; }
+  if (!content) { showToast('内容を入力してください', 'error'); return; }
+
+  const btn = document.getElementById(prefix + 'Submit');
+  btn.disabled = true;
+  btn.textContent = '保存中...';
+
+  try {
+    let fileUrl = '';
+    let fileName = '';
+    let isImage = false;
+
+    if (file) {
+      showToast('画像をアップロード中...', 'success');
+      const result = await uploadToCloudinary(file);
+      fileUrl = result.url;
+      fileName = file.name;
+      isImage = result.isImage;
+    }
+
+    const saveData = { user_id: currentUser.uid, category: cat, title, content, remarks, fileUrl, fileName, isImage };
+
+    if (editId) {
+      const existing = items.find(i => i.id === editId);
+      if (!file && existing) {
+        saveData.fileUrl = existing.fileUrl || '';
+        saveData.fileName = existing.fileName || '';
+        saveData.isImage = existing.isImage || false;
+      }
+      await updateDoc(doc(db, 'vaultItems', editId), saveData);
+      showToast('更新しました ✓', 'success');
+    } else {
+      saveData.createdAt = serverTimestamp();
+      await addDoc(collection(db, 'vaultItems'), saveData);
+      showToast('登録しました ✓', 'success');
+    }
+
+    resetForm();
+    if (prefix === 'mobile') closeMobileFormDirect();
+    await loadItems();
+  } catch(e) {
+    showToast('エラー: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = editId ? '更新する' : '登録する';
+  }
+};
+
+window.startEdit = (id) => {
+  const item = items.find(i => i.id === id);
+  if (!item) return;
+  editId = id;
+  const cat = normCat(item.category);
+  const isMobile = window.innerWidth <= 768;
+  const prefix = isMobile ? 'mobile' : 'pc';
+
+  if (isMobile) openMobileForm();
+
+  document.getElementById(prefix === 'pc' ? 'pcFormTitle' : 'mobileFormTitle').textContent = '✏️ 編集中';
+  document.getElementById(prefix + 'Title').value = item.title;
+  document.getElementById(prefix + 'Content').value = item.content;
+  document.getElementById(prefix + 'Remarks').value = item.remarks || '';
+  document.getElementById(prefix + 'Submit').textContent = '更新する';
+  document.getElementById(prefix + 'Cancel').style.display = 'block';
+  document.getElementById(prefix + 'CatGrid').querySelectorAll('.cat-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === cat));
+  selectedCat[prefix] = cat;
+
+  if (item.fileUrl) {
+    document.getElementById(prefix + 'FileName').textContent = item.fileName + '（変更なし）';
+    document.getElementById(prefix + 'FilePreview').style.display = 'flex';
+    if (item.isImage) {
+      const img = document.getElementById(prefix + 'ImgPreview');
+      img.src = item.fileUrl;
+      img.style.display = 'block';
+    }
+  }
+};
+
+window.deleteItem = async (id) => {
+  if (!confirm('削除しますか？')) return;
+  try {
+    await deleteDoc(doc(db, 'vaultItems', id));
+    items = items.filter(i => i.id !== id);
+    renderList();
+    updateCount();
+    showToast('削除しました', 'success');
+  } catch(e) { showToast('削除エラー: ' + e.message, 'error'); }
+};
+
+window.showDetail = (id) => {
+  const item = items.find(i => i.id === id);
+  if (!item) return;
+  document.getElementById('detailTitle').textContent = item.title;
+  document.getElementById('detailCat').textContent = normCat(item.category);
+  document.getElementById('detailContent').textContent = item.content;
+  const rem = document.getElementById('detailRemarks');
+  if (item.remarks) {
+    rem.innerHTML = linkify(item.remarks);
+    rem.style.display = 'block';
+  } else {
+    rem.style.display = 'none';
+  }
+  const fileEl = document.getElementById('detailFile');
+  if (item.fileUrl && item.isImage) {
+    fileEl.innerHTML = `<p style="font-size:12px;color:var(--text2);margin-bottom:6px">📎 ${esc(item.fileName)}</p><img src="${item.fileUrl}" style="max-width:100%;border-radius:8px">`;
+  } else if (item.fileUrl) {
+    fileEl.innerHTML = `<a href="${item.fileUrl}" target="_blank">📄 ${esc(item.fileName)} を開く</a>`;
+  } else { fileEl.innerHTML = ''; }
+  document.getElementById('detailOverlay').classList.add('show');
+};
+
+window.closeDetail = (e) => { if (e.target === document.getElementById('detailOverlay')) document.getElementById('detailOverlay').classList.remove('show'); };
+window.closeDetailDirect = () => document.getElementById('detailOverlay').classList.remove('show');
+window.openMobileForm = () => document.getElementById('mobileFormOverlay').classList.add('show');
+window.closeMobileFormDirect = () => document.getElementById('mobileFormOverlay').classList.remove('show');
+
+window.resetForm = () => {
+  editId = null;
+  ['pc', 'mobile'].forEach(p => {
+    selectedFile[p] = null;
+    document.getElementById(p === 'pc' ? 'pcFormTitle' : 'mobileFormTitle').textContent = '＋ 新規登録';
+    document.getElementById(p + 'Title').value = '';
+    document.getElementById(p + 'Content').value = '';
+    document.getElementById(p + 'Remarks').value = '';
+    document.getElementById(p + 'File').value = '';
+    document.getElementById(p + 'FilePreview').style.display = 'none';
+    document.getElementById(p + 'ImgPreview').style.display = 'none';
+    document.getElementById(p + 'ImgPreview').src = '';
+    document.getElementById(p + 'Submit').textContent = '登録する';
+    document.getElementById(p + 'Submit').disabled = false;
+    document.getElementById(p + 'Cancel').style.display = 'none';
+    document.getElementById(p + 'CatGrid').querySelectorAll('.cat-btn').forEach((b, i) => b.classList.toggle('active', i === 0));
+    selectedCat[p] = '銀行口座';
+  });
+};
+
+function esc(str) { return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = `toast ${type} show`;
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+</script>
 </body>
 </html>
-<a href="https://github.com/sugiyamasmp-hue" target="_blank">
-  GitHub (sugiyamasmp-hue)<br>
-  <span>github.com/sugiyamasmp-hue</span>
-</a>
-<a href="https://github.com/osugihiro" target="_blank">
-  GitHub (osugihiro)<br>
-  <span>github.com/osugihiro</span>
-</a>
-<a href="https://vercel.com/dashboard" target="_blank">
-  Vercel ダッシュボード<br>
-  <span>vercel.com/dashboard</span>
-</a>
-
