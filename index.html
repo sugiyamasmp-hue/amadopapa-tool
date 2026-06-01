@@ -6,288 +6,258 @@
 <title>Amadopapa Tools</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #fdf6f0;
-    --card: #ffffff;
-    --shadow: rgba(180,140,110,0.15);
-    --accent1: #ff8c69;
-    --accent2: #ffb347;
-    --accent3: #87ceeb;
-    --accent4: #98d8a0;
-    --accent5: #c9a8e0;
-    --text: #4a3728;
-    --sub: #9e8070;
-    --paw: #ffcba4;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'M PLUS Rounded 1c', 'Nunito', sans-serif;
-    background: var(--bg);
-    min-height: 100vh;
-    padding: 24px 16px 40px;
-    background-image:
-      radial-gradient(circle at 10% 20%, rgba(255,180,120,0.12) 0%, transparent 50%),
-      radial-gradient(circle at 90% 80%, rgba(135,206,235,0.12) 0%, transparent 50%),
-      radial-gradient(circle at 50% 50%, rgba(200,168,224,0.08) 0%, transparent 60%);
-  }
-
-  /* ---- Header ---- */
-  header {
-    text-align: center;
-    margin-bottom: 32px;
-    animation: fadeDown 0.6s ease both;
-  }
-
-  .logo-wrap {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    background: white;
-    border-radius: 50px;
-    padding: 10px 24px 10px 16px;
-    box-shadow: 0 4px 18px var(--shadow);
-    margin-bottom: 8px;
-  }
-
-  .paw-icon { font-size: 28px; }
-
-  header h1 {
-    font-size: 22px;
-    font-weight: 900;
-    color: var(--text);
-    letter-spacing: 0.5px;
-  }
-  header h1 span { color: var(--accent1); }
-
-  .tagline {
-    font-size: 12px;
-    color: var(--sub);
-    font-weight: 600;
-    letter-spacing: 1px;
-  }
-
-  /* ---- Section label ---- */
-  .section-label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 1.5px;
-    color: var(--sub);
-    text-transform: uppercase;
-    margin: 24px 4px 10px;
-    animation: fadeUp 0.5s ease both;
-  }
-  .section-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(to right, rgba(180,140,110,0.2), transparent);
-  }
-
-  /* ---- Card grid ---- */
-  .grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-
-  .card {
-    background: var(--card);
-    border-radius: 20px;
-    padding: 18px 14px 16px;
-    text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    box-shadow: 0 3px 16px var(--shadow);
-    transition: transform 0.18s ease, box-shadow 0.18s ease;
-    position: relative;
-    overflow: hidden;
-    animation: popIn 0.4s cubic-bezier(.34,1.56,.64,1) both;
-  }
-
-  .card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 4px;
-    border-radius: 20px 20px 0 0;
-    background: var(--c, var(--accent1));
-  }
-
-  .card:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 8px 28px var(--shadow);
-  }
-  .card:active { transform: scale(0.97); }
-
-  .card-icon {
-    width: 52px; height: 52px;
-    border-radius: 16px;
-    background: var(--c, var(--accent1));
-    display: flex; align-items: center; justify-content: center;
-    font-size: 26px;
-    box-shadow: 0 4px 12px color-mix(in srgb, var(--c, var(--accent1)) 40%, transparent);
-    flex-shrink: 0;
-  }
-
-  .card-name {
-    font-size: 13px;
-    font-weight: 800;
-    color: var(--text);
-    text-align: center;
-    line-height: 1.3;
-  }
-
-  .card-url {
-    font-size: 9.5px;
-    color: var(--sub);
-    text-align: center;
-    word-break: break-all;
-    line-height: 1.4;
-  }
-
-  /* ---- Dropdown section ---- */
-  .dropdown-section {
-    margin-top: 8px;
-    animation: fadeUp 0.6s ease 0.2s both;
-  }
-
-  .dropdown-card {
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 3px 16px var(--shadow);
-    overflow: hidden;
-  }
-
-  .dropdown-toggle {
-    width: 100%;
-    background: none;
-    border: none;
-    padding: 16px 18px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    cursor: pointer;
-    font-family: inherit;
-    transition: background 0.15s;
-  }
-  .dropdown-toggle:hover { background: rgba(255,140,105,0.05); }
-
-  .dropdown-icon {
-    width: 42px; height: 42px;
-    border-radius: 13px;
-    background: linear-gradient(135deg, #ff8c69, #ffb347);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px;
-    flex-shrink: 0;
-  }
-
-  .dropdown-title {
-    flex: 1;
-    text-align: left;
-    font-size: 14px;
-    font-weight: 800;
-    color: var(--text);
-  }
-
-  .chevron {
-    font-size: 14px;
-    color: var(--sub);
-    transition: transform 0.25s ease;
-  }
-  .dropdown-card.open .chevron { transform: rotate(180deg); }
-
-  .dropdown-items {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.35s ease;
-  }
-  .dropdown-card.open .dropdown-items { max-height: 600px; }
-
-  .dropdown-divider {
-    height: 1px;
-    background: rgba(180,140,110,0.12);
-    margin: 0 16px;
-  }
-
-  .dropdown-link {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 13px 18px;
-    text-decoration: none;
-    transition: background 0.15s;
-    border-bottom: 1px solid rgba(180,140,110,0.07);
-  }
-  .dropdown-link:last-child { border-bottom: none; }
-  .dropdown-link:hover { background: rgba(255,140,105,0.05); }
-
-  .dl-icon {
-    width: 36px; height: 36px;
-    border-radius: 11px;
-    background: var(--c, var(--accent3));
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
-    flex-shrink: 0;
-  }
-
-  .dl-info { flex: 1; min-width: 0; }
-  .dl-name {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--text);
-  }
-  .dl-url {
-    font-size: 10px;
-    color: var(--sub);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 200px;
-  }
-
-  .dl-arrow {
-    font-size: 14px;
-    color: var(--sub);
-    flex-shrink: 0;
-  }
-
-  /* ---- Animations ---- */
-  @keyframes fadeDown {
-    from { opacity: 0; transform: translateY(-16px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes popIn {
-    from { opacity: 0; transform: scale(0.85); }
-    to   { opacity: 1; transform: scale(1); }
-  }
-
-  /* stagger cards */
-  .card:nth-child(1) { animation-delay: 0.05s; }
-  .card:nth-child(2) { animation-delay: 0.10s; }
-  .card:nth-child(3) { animation-delay: 0.15s; }
-  .card:nth-child(4) { animation-delay: 0.20s; }
-  .card:nth-child(5) { animation-delay: 0.25s; }
-
-  /* ---- Footer paw ---- */
-  footer {
-    text-align: center;
-    margin-top: 36px;
-    font-size: 12px;
-    color: var(--sub);
-    animation: fadeUp 0.5s ease 0.4s both;
-  }
-  footer .paws { font-size: 22px; letter-spacing: 4px; }
+:root {
+--bg: #fdf6f0;
+--card: #ffffff;
+--shadow: rgba(180,140,110,0.15);
+--accent1: #ff8c69;
+--accent2: #ffb347;
+--accent3: #87ceeb;
+--accent4: #98d8a0;
+--accent5: #c9a8e0;
+--text: #4a3728;
+--sub: #9e8070;
+--paw: #ffcba4;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+font-family: 'M PLUS Rounded 1c', 'Nunito', sans-serif;
+background: var(--bg);
+min-height: 100vh;
+padding: 24px 16px 40px;
+background-image:
+  radial-gradient(circle at 10% 20%, rgba(255,180,120,0.12) 0%, transparent 50%),
+  radial-gradient(circle at 90% 80%, rgba(135,206,235,0.12) 0%, transparent 50%),
+  radial-gradient(circle at 50% 50%, rgba(200,168,224,0.08) 0%, transparent 60%);
+}
+/* ---- Header ---- */
+header {
+text-align: center;
+margin-bottom: 32px;
+animation: fadeDown 0.6s ease both;
+}
+.logo-wrap {
+display: inline-flex;
+align-items: center;
+gap: 10px;
+background: white;
+border-radius: 50px;
+padding: 10px 24px 10px 16px;
+box-shadow: 0 4px 18px var(--shadow);
+margin-bottom: 8px;
+}
+.paw-icon { font-size: 28px; }
+header h1 {
+font-size: 22px;
+font-weight: 900;
+color: var(--text);
+letter-spacing: 0.5px;
+}
+header h1 span { color: var(--accent1); }
+.tagline {
+font-size: 12px;
+color: var(--sub);
+font-weight: 600;
+letter-spacing: 1px;
+}
+/* ---- Section label ---- */
+.section-label {
+display: flex;
+align-items: center;
+gap: 8px;
+font-size: 11px;
+font-weight: 800;
+letter-spacing: 1.5px;
+color: var(--sub);
+text-transform: uppercase;
+margin: 24px 4px 10px;
+animation: fadeUp 0.5s ease both;
+}
+.section-label::after {
+content: '';
+flex: 1;
+height: 1px;
+background: linear-gradient(to right, rgba(180,140,110,0.2), transparent);
+}
+/* ---- Card grid ---- */
+.grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 12px;
+}
+.card {
+background: var(--card);
+border-radius: 20px;
+padding: 18px 14px 16px;
+text-decoration: none;
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 8px;
+box-shadow: 0 3px 16px var(--shadow);
+transition: transform 0.18s ease, box-shadow 0.18s ease;
+position: relative;
+overflow: hidden;
+animation: popIn 0.4s cubic-bezier(.34,1.56,.64,1) both;
+}
+.card::before {
+content: '';
+position: absolute;
+top: 0; left: 0; right: 0;
+height: 4px;
+border-radius: 20px 20px 0 0;
+background: var(--c, var(--accent1));
+}
+.card:hover {
+transform: translateY(-4px) scale(1.02);
+box-shadow: 0 8px 28px var(--shadow);
+}
+.card:active { transform: scale(0.97); }
+.card-icon {
+width: 52px; height: 52px;
+border-radius: 16px;
+background: var(--c, var(--accent1));
+display: flex; align-items: center; justify-content: center;
+font-size: 26px;
+box-shadow: 0 4px 12px color-mix(in srgb, var(--c, var(--accent1)) 40%, transparent);
+flex-shrink: 0;
+}
+.card-name {
+font-size: 13px;
+font-weight: 800;
+color: var(--text);
+text-align: center;
+line-height: 1.3;
+}
+.card-url {
+font-size: 9.5px;
+color: var(--sub);
+text-align: center;
+word-break: break-all;
+line-height: 1.4;
+}
+/* ---- Dropdown section ---- */
+.dropdown-section {
+margin-top: 8px;
+animation: fadeUp 0.6s ease 0.2s both;
+}
+.dropdown-card {
+background: white;
+border-radius: 20px;
+box-shadow: 0 3px 16px var(--shadow);
+overflow: hidden;
+}
+.dropdown-toggle {
+width: 100%;
+background: none;
+border: none;
+padding: 16px 18px;
+display: flex;
+align-items: center;
+gap: 12px;
+cursor: pointer;
+font-family: inherit;
+transition: background 0.15s;
+}
+.dropdown-toggle:hover { background: rgba(255,140,105,0.05); }
+.dropdown-icon {
+width: 42px; height: 42px;
+border-radius: 13px;
+background: linear-gradient(135deg, #ff8c69, #ffb347);
+display: flex; align-items: center; justify-content: center;
+font-size: 22px;
+flex-shrink: 0;
+}
+.dropdown-title {
+flex: 1;
+text-align: left;
+font-size: 14px;
+font-weight: 800;
+color: var(--text);
+}
+.chevron {
+font-size: 14px;
+color: var(--sub);
+transition: transform 0.25s ease;
+}
+.dropdown-card.open .chevron { transform: rotate(180deg); }
+.dropdown-items {
+max-height: 0;
+overflow: hidden;
+transition: max-height 0.35s ease;
+}
+.dropdown-card.open .dropdown-items { max-height: 600px; }
+.dropdown-divider {
+height: 1px;
+background: rgba(180,140,110,0.12);
+margin: 0 16px;
+}
+.dropdown-link {
+display: flex;
+align-items: center;
+gap: 12px;
+padding: 13px 18px;
+text-decoration: none;
+transition: background 0.15s;
+border-bottom: 1px solid rgba(180,140,110,0.07);
+}
+.dropdown-link:last-child { border-bottom: none; }
+.dropdown-link:hover { background: rgba(255,140,105,0.05); }
+.dl-icon {
+width: 36px; height: 36px;
+border-radius: 11px;
+background: var(--c, var(--accent3));
+display: flex; align-items: center; justify-content: center;
+font-size: 18px;
+flex-shrink: 0;
+}
+.dl-info { flex: 1; min-width: 0; }
+.dl-name {
+font-size: 13px;
+font-weight: 700;
+color: var(--text);
+}
+.dl-url {
+font-size: 10px;
+color: var(--sub);
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+max-width: 200px;
+}
+.dl-arrow {
+font-size: 14px;
+color: var(--sub);
+flex-shrink: 0;
+}
+/* ---- Animations ---- */
+@keyframes fadeDown {
+from { opacity: 0; transform: translateY(-16px); }
+to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeUp {
+from { opacity: 0; transform: translateY(12px); }
+to { opacity: 1; transform: translateY(0); }
+}
+@keyframes popIn {
+from { opacity: 0; transform: scale(0.85); }
+to { opacity: 1; transform: scale(1); }
+}
+/* stagger cards */
+.card:nth-child(1) { animation-delay: 0.05s; }
+.card:nth-child(2) { animation-delay: 0.10s; }
+.card:nth-child(3) { animation-delay: 0.15s; }
+.card:nth-child(4) { animation-delay: 0.20s; }
+.card:nth-child(5) { animation-delay: 0.25s; }
+/* ---- Footer paw ---- */
+footer {
+text-align: center;
+margin-top: 36px;
+font-size: 12px;
+color: var(--sub);
+animation: fadeUp 0.5s ease 0.4s both;
+}
+footer .paws { font-size: 22px; letter-spacing: 4px; }
 </style>
 </head>
 <body>
@@ -304,10 +274,10 @@
 <div class="section-label">🔧 Main Tools</div>
 <div class="grid">
 
-  <a href="https://ketuatu-git-main-sugiyamasmp-hues-projects.vercel.app" target="_blank" class="card" style="--c:#ff7b7b">
+  <a href="https://ketuatu.vercel.app" target="_blank" class="card" style="--c:#ff7b7b">
     <div class="card-icon">❤️</div>
     <div class="card-name">血圧管理</div>
-    <div class="card-url">ketuatu…vercel.app</div>
+    <div class="card-url">ketuatu.vercel.app</div>
   </a>
 
   <a href="https://kaimono-memo1.vercel.app" target="_blank" class="card" style="--c:#ffb347">
@@ -347,7 +317,6 @@
     </button>
     <div class="dropdown-items">
       <div class="dropdown-divider"></div>
-
       <a href="https://kmcdb.vercel.app" target="_blank" class="dropdown-link">
         <div class="dl-icon" style="--c:#87ceeb">⚓</div>
         <div class="dl-info">
@@ -356,7 +325,6 @@
         </div>
         <span class="dl-arrow">›</span>
       </a>
-
       <a href="https://wagaya-recipe.vercel.app" target="_blank" class="dropdown-link">
         <div class="dl-icon" style="--c:#98d8a0">🍲</div>
         <div class="dl-info">
@@ -365,7 +333,6 @@
         </div>
         <span class="dl-arrow">›</span>
       </a>
-
       <a href="https://fp2study.vercel.app" target="_blank" class="dropdown-link">
         <div class="dl-icon" style="--c:#c9a8e0">🤖</div>
         <div class="dl-info">
@@ -374,7 +341,6 @@
         </div>
         <span class="dl-arrow">›</span>
       </a>
-
       <a href="https://github.com" target="_blank" class="dropdown-link">
         <div class="dl-icon" style="--c:#555">🐙</div>
         <div class="dl-info">
@@ -383,7 +349,6 @@
         </div>
         <span class="dl-arrow">›</span>
       </a>
-
       <a href="https://vercel.com" target="_blank" class="dropdown-link">
         <div class="dl-icon" style="--c:#e0e0e0">▲</div>
         <div class="dl-info">
@@ -392,7 +357,6 @@
         </div>
         <span class="dl-arrow">›</span>
       </a>
-
     </div>
   </div>
 </div>
@@ -403,10 +367,11 @@
 </footer>
 
 <script>
-  function toggleDropdown() {
-    const card = document.getElementById('moreCard');
-    card.classList.toggle('open');
-  }
+function toggleDropdown() {
+  const card = document.getElementById('moreCard');
+  card.classList.toggle('open');
+}
 </script>
+
 </body>
 </html>
