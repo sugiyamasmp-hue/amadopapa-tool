@@ -3,116 +3,203 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Amadopapatool</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<title>Amadopapa Tools</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#f5f5f0;font-family:'Noto Sans JP',sans-serif;color:#1a1a1a;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
-.container{width:100%;max-width:600px}
-.header{text-align:center;margin-bottom:2rem}
-.header h1{font-size:22px;font-weight:500;letter-spacing:0.02em;color:#1a1a1a}
-.header p{font-size:13px;color:#888;margin-top:4px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:1.5rem}
-.card{text-decoration:none;background:white;border:0.5px solid rgba(0,0,0,0.1);border-radius:12px;padding:1.25rem 1rem;display:flex;flex-direction:column;align-items:center;gap:10px;transition:background 0.15s}
-.card:hover{background:#f9f9f7}
-.icon-box{width:44px;height:44px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:22px}
-.icon-box.blue{background:#e6f1fb;color:#185fa5}
-.icon-box.red{background:#fcebeb;color:#a32d2d}
-.icon-box.green{background:#eaf3de;color:#3b6d11}
-.icon-box.amber{background:#faeeda;color:#ba7517}
-.icon-box.gray{background:#f1efe8;color:#5f5e5a}
-.icon-box.gold{background:#faeeda;color:#ba7517}
-.icon-box.dark{background:#e8e8e8;color:#1a1a1a}
-.card-title{font-size:14px;font-weight:500;color:#1a1a1a;text-align:center}
-.card-desc{font-size:12px;color:#888;text-align:center;margin-top:2px}
-.dropdown-wrapper{background:#f1efe8;border-radius:12px;border:0.5px solid rgba(0,0,0,0.1);overflow:hidden}
-.dropdown-btn{width:100%;padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;background:transparent;border:none;cursor:pointer}
-.dropdown-btn-left{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:500;color:#1a1a1a}
-.dropdown-content{display:none;border-top:0.5px solid rgba(0,0,0,0.1)}
-.dropdown-item{text-decoration:none;display:flex;align-items:center;gap:12px;padding:0.875rem 1.25rem;border-bottom:0.5px solid rgba(0,0,0,0.07);background:transparent;transition:background 0.15s}
-.dropdown-item:last-child{border-bottom:none}
-.dropdown-item:hover{background:white}
-.icon-box-sm{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.icon-box-sm.blue{background:#e6f1fb;color:#185fa5}
-.icon-box-sm.green{background:#eaf3de;color:#3b6d11}
-.icon-box-sm.dark{background:#e8e8e8;color:#1a1a1a}
-.icon-box-sm.gray{background:#f1efe8;color:#5f5e5a}
-.item-title{font-size:14px;font-weight:500;color:#1a1a1a}
-.item-url{font-size:12px;color:#888;margin-top:2px}
-.external{font-size:14px;color:#888;margin-left:auto}
+  :root{
+    --bg:#eef0f2;
+    --card:#ffffff;
+    --ink:#2b2f36;
+    --sub:#7d8693;
+    --line:#dfe3e8;
+    --silver:#9aa3ad;
+    --silver-deep:#6b7480;
+    --amber:#d98a3d;
+    --amber-soft:#f6e7d4;
+    --shadow:0 1px 2px rgba(43,47,54,.06),0 6px 20px rgba(43,47,54,.07);
+    --shadow-hover:0 2px 4px rgba(43,47,54,.08),0 14px 34px rgba(43,47,54,.13);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
+    background:
+      radial-gradient(1200px 500px at 50% -200px,#f7f8fa 0%,var(--bg) 60%);
+    color:var(--ink);
+    min-height:100vh;
+    padding:28px 18px 60px;
+    line-height:1.5;
+  }
+  .wrap{max-width:760px;margin:0 auto;}
+
+  /* ---- Header ---- */
+  header{text-align:center;padding:14px 0 30px;}
+  .avatar{
+    width:74px;height:74px;border-radius:22px;
+    margin:0 auto 16px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:38px;
+    background:linear-gradient(145deg,#fff,#e9ecef);
+    border:1px solid var(--line);
+    box-shadow:var(--shadow);
+  }
+  h1{
+    font-size:27px;font-weight:800;letter-spacing:.02em;
+    color:var(--ink);
+  }
+  .tagline{
+    margin-top:6px;font-size:13.5px;color:var(--sub);font-weight:500;
+  }
+
+  /* ---- Section label ---- */
+  .section-label{
+    display:flex;align-items:center;gap:12px;
+    margin:34px 4px 14px;
+    font-size:12px;font-weight:700;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--silver-deep);
+  }
+  .section-label::after{
+    content:"";flex:1;height:1px;background:var(--line);
+  }
+
+  /* ---- Grid ---- */
+  .grid{
+    display:grid;gap:12px;
+    grid-template-columns:repeat(2,1fr);
+  }
+  .grid.compact{grid-template-columns:repeat(2,1fr);}
+
+  /* ---- Card ---- */
+  .tool{
+    display:flex;align-items:center;gap:13px;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:15px 15px;
+    text-decoration:none;color:inherit;
+    box-shadow:var(--shadow);
+    transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease;
+    min-height:66px;
+  }
+  .tool:hover,.tool:focus-visible{
+    transform:translateY(-2px);
+    box-shadow:var(--shadow-hover);
+    border-color:#cfd5dc;
+    outline:none;
+  }
+  .tool:focus-visible{outline:2.5px solid var(--amber);outline-offset:2px;}
+  .tool:active{transform:translateY(0);}
+
+  .ic{
+    flex:0 0 44px;width:44px;height:44px;border-radius:12px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:22px;
+    background:linear-gradient(150deg,#f4f6f8,#e7ebef);
+    border:1px solid var(--line);
+  }
+  .meta{min-width:0;}
+  .name{
+    font-size:15px;font-weight:700;color:var(--ink);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .desc{
+    font-size:11.5px;color:var(--sub);font-weight:500;margin-top:2px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+
+  /* compact card (others) */
+  .tool.mini{padding:13px 14px;min-height:58px;}
+  .tool.mini .ic{flex-basis:38px;width:38px;height:38px;font-size:19px;border-radius:11px;}
+  .tool.mini .name{font-size:14px;}
+
+  footer{
+    text-align:center;margin-top:40px;
+    font-size:11.5px;color:var(--silver);letter-spacing:.04em;
+  }
+  footer .paw{color:var(--silver-deep);}
+
+  @media (max-width:430px){
+    .grid,.grid.compact{grid-template-columns:1fr;}
+    h1{font-size:24px;}
+    body{padding:22px 14px 50px;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .tool{transition:none;}
+  }
 </style>
 </head>
 <body>
-<div class="container">
-  <div class="header">
-    <h1>Amadopapatool</h1>
-    <p>amadopapa のツール集</p>
-  </div>
+  <div class="wrap">
+    <header>
+      <div class="avatar" aria-hidden="true">🐾</div>
+      <h1>Amadopapa Tools</h1>
+      <p class="tagline">アマドパパのツール集 ✨</p>
+    </header>
 
-  <div class="grid">
-    <a href="https://note-rewrite.vercel.app/" target="_blank" class="card">
-      <div class="icon-box blue"><i class="ti ti-pencil"></i></div>
-      <div><div class="card-title">note リライト</div><div class="card-desc">文章をAIで改善</div></div>
-    </a>
-    <a href="https://my-health-diary-six.vercel.app/" target="_blank" class="card">
-      <div class="icon-box red"><i class="ti ti-heart-rate-monitor"></i></div>
-      <div><div class="card-title">Health-Diary</div><div class="card-desc">健康記録・グラフ表示</div></div>
-    </a>
-    <a href="https://kaimono-memo1.vercel.app" target="_blank" class="card">
-      <div class="icon-box green"><i class="ti ti-shopping-cart"></i></div>
-      <div><div class="card-title">買い物メモ</div><div class="card-desc">リスト作成・共有</div></div>
-    </a>
-    <a href="https://fp-pink-rho.vercel.app" target="_blank" class="card">
-      <div class="icon-box amber"><i class="ti ti-calculator"></i></div>
-      <div><div class="card-title">FP ツール</div><div class="card-desc">ファイナンス計算</div></div>
-    </a>
-    <a href="https://vault-chi-brown.vercel.app" target="_blank" class="card">
-      <div class="icon-box gray"><i class="ti ti-database"></i></div>
-      <div><div class="card-title">情報管理</div><div class="card-desc">データ保管・整理</div></div>
-    </a>
-    <a href="https://gold-tracker-two-beryl.vercel.app" target="_blank" class="card">
-      <div class="icon-box gold"><i class="ti ti-coin"></i></div>
-      <div><div class="card-title">ゴールド</div><div class="card-desc">金価格トラッカー</div></div>
-    </a>
-    <a href="https://fp2study.vercel.app" target="_blank" class="card">
-      <div class="icon-box blue"><i class="ti ti-certificate"></i></div>
-      <div><div class="card-title">Fp2Aid学習</div><div class="card-desc">FP2級学習サポート</div></div>
-    </a>
-    <a href="https://wagaya-recipe.vercel.app" target="_blank" class="card">
-      <div class="icon-box amber"><i class="ti ti-soup"></i></div>
-      <div><div class="card-title">我が家のレシピ</div><div class="card-desc">家庭レシピ管理</div></div>
-    </a>
-  </div>
-
-  <div class="dropdown-wrapper">
-    <button class="dropdown-btn" onclick="const d=this.nextElementSibling;const open=d.style.display==='block';d.style.display=open?'none':'block';this.querySelector('i').className='ti '+(open?'ti-chevron-down':'ti-chevron-up');">
-      <div class="dropdown-btn-left"><i class="ti ti-apps" style="font-size:18px;color:#888"></i>その他のツール</div>
-      <i class="ti ti-chevron-down" style="font-size:16px;color:#888"></i>
-    </button>
-    <div class="dropdown-content">
-      <a href="https://kmc-theta.vercel.app" target="_blank" class="dropdown-item">
-        <div class="icon-box-sm blue"><i class="ti ti-users"></i></div>
-        <div><div class="item-title">KMC 会員</div><div class="item-url">kmc-theta.vercel.app</div></div>
-        <i class="ti ti-external-link external"></i>
+    <div class="section-label">Main Tools</div>
+    <div class="grid">
+      <a class="tool" href="https://note-rewrite.vercel.app/" target="_blank" rel="noopener">
+        <span class="ic" aria-hidden="true">✍️</span>
+        <span class="meta"><span class="name">note リライト</span><span class="desc">文章をAIで改善</span></span>
       </a>
-      <a href="https://amadogyoza.vercel.app" target="_blank" class="dropdown-item">
-        <div class="icon-box-sm green"><i class="ti ti-tools-kitchen-2"></i></div>
-        <div><div class="item-title">餃子ログ</div><div class="item-url">amadogyoza.vercel.app</div></div>
-        <i class="ti ti-external-link external"></i>
+      <a class="tool" href="https://my-health-diary-six.vercel.app/" target="_blank" rel="noopener">
+        <span class="ic" aria-hidden="true">🩺</span>
+        <span class="meta"><span class="name">Health-Diary</span><span class="desc">健康記録・グラフ表示</span></span>
       </a>
-      <a href="https://github.com" target="_blank" class="dropdown-item">
-        <div class="icon-box-sm dark"><i class="ti ti-brand-github"></i></div>
-        <div><div class="item-title">GitHub</div><div class="item-url">github.com</div></div>
-        <i class="ti ti-external-link external"></i>
+      <a class="tool" href="https://kaimono-memo1.vercel.app" target="_blank" rel="noopener">
+        <span class="ic" aria-hidden="true">🛒</span>
+        <span class="meta"><span class="name">買い物メモ</span><span class="desc">リスト作成・共有</span></span>
       </a>
-      <a href="https://vercel.com" target="_blank" class="dropdown-item">
-        <div class="icon-box-sm gray"><i class="ti ti-triangle"></i></div>
-        <div><div class="item-title">Vercel</div><div class="item-url">vercel.com</div></div>
-        <i class="ti ti-external-link external"></i>
+      <a class="tool" href="https://fp-pink-rho.vercel.app" target="_blank" rel="noopener">
+        <span class="ic" aria-hidden="true">🧮</span>
+        <span class="meta"><span class="name">FP ツール</span><span class="desc">ファイナンス計算</span></span>
+      </a>
+      <a class="tool" href="https://vault-chi-brown.vercel.app" target="_blank" rel="noopener">
+        <span class="ic" aria-hidden="true">🗂️</span>
+        <span class="meta"><span class="name">情報管理</span><span class="desc">データ保管・整理</span></span>
+      </a>
+      <a class="tool" href="https://gold-tracker-two-beryl.vercel.app" target="_blank" rel="noopener">
+        <span class="ic" aria-hidden="true">🥇</span>
+        <span class="meta"><span class="name">ゴールド</span><span class="desc">金価格トラッカー</span></span>
+      </a>
+      <a class="tool" href="https://fp2study.vercel.app" target="_blank" rel="noopener">
+        <span class="ic" aria-hidden="true">📚</span>
+        <span class="meta"><span class="name">Fp2Aid学習</span><span class="desc">FP2級学習サポート</span></span>
+      </a>
+      <a class="tool" href="https://wagaya-recipe.vercel.app" target="_blank" rel="noopener">
+        <span class="ic" aria-hidden="true">🍳</span>
+        <span class="meta"><span class="name">我が家のレシピ</span><span class="desc">家庭レシピ管理</span></span>
       </a>
     </div>
+
+    <div class="section-label">その他のツール</div>
+    <div class="grid compact">
+      <a class="tool mini" href="https://kmc-theta.vercel.app" target="_blank" rel="noopener">
+        <span class="ic" aria-hidden="true">⚓</span>
+        <span class="meta"><span class="name">KMC 会員</span></span>
+      </a>
+      <a class="tool mini" href="https://amadogyoza.vercel.app" target="_blank" rel="noopener">
+        <span class="ic" aria-hidden="true">🥟</span>
+        <span class="meta"><span class="name">餃子ログ</span></span>
+      </a>
+      <a class="tool mini" href="https://github.com" target="_blank" rel="noopener">
+        <span class="ic" aria-hidden="true">🐙</span>
+        <span class="meta"><span class="name">GitHub</span></span>
+      </a>
+      <a class="tool mini" href="https://vercel.com" target="_blank" rel="noopener">
+        <span class="ic" aria-hidden="true">▲</span>
+        <span class="meta"><span class="name">Vercel</span></span>
+      </a>
+      <a class="tool mini" href="https://supabase.com" target="_blank" rel="noopener">
+        <span class="ic" aria-hidden="true">⚡</span>
+        <span class="meta"><span class="name">Supabase</span></span>
+      </a>
+      <a class="tool mini" href="https://firebase.google.com/?hl=ja" target="_blank" rel="noopener">
+        <span class="ic" aria-hidden="true">🔥</span>
+        <span class="meta"><span class="name">Firebase</span></span>
+      </a>
+    </div>
+
+    <footer>Developed by amadopapa <span class="paw">🐾</span></footer>
   </div>
-</div>
 </body>
 </html>
