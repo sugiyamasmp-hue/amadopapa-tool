@@ -61,6 +61,20 @@
     content:"";flex:1;height:1px;background:var(--line);
   }
 
+  /* ---- Dropdown (others) ---- */
+  .tool-dropdown{margin-top:34px;}
+  .dropdown-summary{
+    margin:0 4px 14px;cursor:pointer;user-select:none;list-style:none;
+  }
+  .dropdown-summary::-webkit-details-marker{display:none;}
+  .dropdown-summary::marker{content:"";}
+  .dropdown-summary .chevron{
+    font-size:12px;color:var(--silver-deep);
+    transition:transform .18s ease;
+  }
+  .tool-dropdown[open] .dropdown-summary .chevron{transform:rotate(180deg);}
+  .tool-dropdown .grid.compact{margin-top:0;}
+
   /* ---- Grid ---- */
   .grid{
     display:grid;gap:12px;
@@ -187,41 +201,50 @@
       </a>
     </div>
 
-    <div class="section-label">その他のツール</div>
-    <div class="grid compact">
-      <a class="tool mini" href="https://kmc-theta.vercel.app" target="_blank" rel="noopener">
-        <span class="ic" aria-hidden="true">⚓</span>
-        <span class="meta"><span class="name">KMC 会員</span></span>
-      </a>
-      <a class="tool mini" href="https://amadogyoza.vercel.app" target="_blank" rel="noopener">
-        <span class="ic" aria-hidden="true">🥟</span>
-        <span class="meta"><span class="name">餃子ログ</span></span>
-      </a>
-      <a class="tool mini" href="https://github.com" target="_blank" rel="noopener">
-        <span class="ic" aria-hidden="true">🐙</span>
-        <span class="meta"><span class="name">GitHub</span></span>
-      </a>
-      <a class="tool mini" href="https://vercel.com" target="_blank" rel="noopener">
-        <span class="ic" aria-hidden="true">▲</span>
-        <span class="meta"><span class="name">Vercel</span></span>
-      </a>
-      <a class="tool mini" href="https://supabase.com" target="_blank" rel="noopener">
-        <span class="ic" aria-hidden="true">⚡</span>
-        <span class="meta"><span class="name">Supabase</span></span>
-      </a>
-      <a class="tool mini" href="https://firebase.google.com/?hl=ja" target="_blank" rel="noopener">
-        <span class="ic" aria-hidden="true">🔥</span>
-        <span class="meta"><span class="name">Firebase</span></span>
-      </a>
-      <a class="tool mini" href="https://script.google.com/home" target="_blank" rel="noopener">
-        <span class="ic" aria-hidden="true">📜</span>
-        <span class="meta"><span class="name">GAS</span></span>
-      </a>
-      <a class="tool mini" href="https://www.netlify.com" target="_blank" rel="noopener">
-        <span class="ic" aria-hidden="true">🌐</span>
-        <span class="meta"><span class="name">Netlify</span></span>
-      </a>
-    </div>
+    <details class="tool-dropdown">
+      <summary class="section-label dropdown-summary">
+        その他のツール
+        <span class="chevron" aria-hidden="true">▾</span>
+      </summary>
+      <div class="grid compact">
+        <a class="tool mini" href="https://kmc-theta.vercel.app" target="_blank" rel="noopener">
+          <span class="ic" aria-hidden="true">⚓</span>
+          <span class="meta"><span class="name">KMC 会員</span></span>
+        </a>
+        <a class="tool mini" href="https://amadogyoza.vercel.app" target="_blank" rel="noopener">
+          <span class="ic" aria-hidden="true">🥟</span>
+          <span class="meta"><span class="name">餃子ログ</span></span>
+        </a>
+        <a class="tool mini" href="https://github.com" target="_blank" rel="noopener">
+          <span class="ic" aria-hidden="true">🐙</span>
+          <span class="meta"><span class="name">GitHub</span></span>
+        </a>
+        <a class="tool mini" href="https://vercel.com" target="_blank" rel="noopener">
+          <span class="ic" aria-hidden="true">▲</span>
+          <span class="meta"><span class="name">Vercel</span></span>
+        </a>
+        <a class="tool mini" href="https://supabase.com" target="_blank" rel="noopener">
+          <span class="ic" aria-hidden="true">⚡</span>
+          <span class="meta"><span class="name">Supabase</span></span>
+        </a>
+        <a class="tool mini" href="https://firebase.google.com/?hl=ja" target="_blank" rel="noopener">
+          <span class="ic" aria-hidden="true">🔥</span>
+          <span class="meta"><span class="name">Firebase</span></span>
+        </a>
+        <a class="tool mini" href="https://script.google.com/home" target="_blank" rel="noopener">
+          <span class="ic" aria-hidden="true">📜</span>
+          <span class="meta"><span class="name">GAS</span></span>
+        </a>
+        <a class="tool mini" href="https://www.netlify.com" target="_blank" rel="noopener">
+          <span class="ic" aria-hidden="true">🌐</span>
+          <span class="meta"><span class="name">Netlify</span></span>
+        </a>
+        <a class="tool mini" href="https://platform.claude.com/settings/keys" target="_blank" rel="noopener">
+          <span class="ic" aria-hidden="true">✳️</span>
+          <span class="meta"><span class="name">Anthropic API</span></span>
+        </a>
+      </div>
+    </details>
 
     <footer>Developed by amadopapa <span class="paw">🐾</span></footer>
   </div>
